@@ -2,24 +2,31 @@ from typing import List
 
 class Solution:
     def threeSumClosest(self, nums: List[int], target: int) -> int:
-        n = len(nums)
         nums.sort()
-        minDist = float('inf')
-        closestSum = 0
+        n = len(nums)
+        closest = float('inf')
+        ans = 0
 
-        for i in range(n-2):
-            j,k = i+1,n-1
+        for i in range(n - 2):
+            # Skip duplicates
+            if i > 0 and nums[i] == nums[i - 1]:
+                continue
 
-            while( j < k):
+            j, k = i + 1, n - 1
+            while j < k:
                 total = nums[i] + nums[j] + nums[k]
-                #Take the abs. value of diff.
+                #Need to take absolute value as dist
                 dist = abs(target - total)
-                if dist < minDist:
-                    minDist = dist
-                    closestSum = total
+
+                if dist < closest:
+                    closest = dist
+                    ans = total
+
+                if total < target:
+                    j += 1
                 elif total > target:
                     k -= 1
                 else:
-                    j += 1
+                    return target  # exact match so return
 
-        return closestSum
+        return ans
